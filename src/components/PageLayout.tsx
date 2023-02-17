@@ -1,63 +1,39 @@
-// import { useState } from 'react'
-import { ConfigProvider, theme, Select } from 'antd';
-import { useThemeContext, Theme } from '@/context/theme_provider';
+import React, { useState, useEffect } from "react";
+import { ConfigProvider, Layout } from "antd";
+import { useThemeContext, Theme } from "@/context/theme_provider";
+import { pinkTheme, blackTheme } from "@/styles/theme";
+import Sider from "./Sider";
 // import Footer from "./Footer";
 
-const theme1 = {
-    algorithm: theme.darkAlgorithm,
-}
-const theme2 = {
-    algorithm: theme.compactAlgorithm,
-}
+const PageLayout = ({ children }: { children: React.ReactNode }) => {
+    const { theme } = useThemeContext();
 
-const PageLayout = ({
-    children
-}: {
-    children: React.ReactNode
-}) => {
-
-    const { theme, changeTheme } = useThemeContext()
-
-    const onChange = (newValue: string) => {
-        changeTheme(newValue as Theme)
+    const getThemeConfig = (str: Theme) => {
+        switch (str) {
+            case "blackTheme":
+                return blackTheme;
+            case "pinkTheme":
+            case "defaultTheme":
+            default:
+                return pinkTheme;
+        }
     };
-
-    const onSearch = (value: string) => {
-        console.log('search:', value);
-    };
-
-
 
     return (
-        <ConfigProvider
-            theme={theme === "dark" ? theme1 : theme2}
-        >
-            <div>
-                <Select
-                    showSearch
-                    placeholder="Select a person"
-                    optionFilterProp="children"
-                    onChange={onChange}
-                    onSearch={onSearch}
-                    filterOption={(input, option) =>
-                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                    }
-                    options={[
-                        {
-                            value: 'dark',
-                            label: 'dark',
-                        },
-                        {
-                            value: 'light',
-                            label: 'light',
-                        },
-                    ]}
-                />
-                {children}
-                {/* <Footer /> */}
-            </div>
+        <ConfigProvider theme={getThemeConfig(theme)}>
+            <Layout>
+                <Layout.Sider className="h-screen text-center">
+                    <Sider />
+                </Layout.Sider>
+                <Layout>
+                    <Layout.Content className="min-h-screen overflow-y-scroll text-center">
+                        <div>{children}</div>
+                        {/* <Footer /> */}
+                    </Layout.Content>
+                </Layout>
+            </Layout>
         </ConfigProvider>
     );
-}
+};
 
 export default PageLayout;

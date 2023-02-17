@@ -1,23 +1,24 @@
-import { createContext, useState, useContext } from 'react';
-import { theme } from 'antd';
+import { createContext, useState, useContext } from "react";
 
-export type Theme = "dark" | "light";
+export type Theme = "pinkTheme" | "blackTheme" | "defaultTheme";
 export type ThemeContextType = {
-  theme: Theme,
+  theme: Theme;
   changeTheme: (theme: Theme) => void;
-}
+};
 
 export const ThemeContext = createContext<ThemeContextType | null>(null);
 
 export default function ThemeProvider({
-  children
+  children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const [themeMode, setThemeMode] = useState<Theme>('light');
+  const [themeMode, setThemeMode] = useState<Theme>("defaultTheme");
 
   return (
-    <ThemeContext.Provider value={{ theme: themeMode, changeTheme: setThemeMode }}>
+    <ThemeContext.Provider
+      value={{ theme: themeMode, changeTheme: setThemeMode }}
+    >
       {children}
     </ThemeContext.Provider>
   );
@@ -26,4 +27,3 @@ export default function ThemeProvider({
 export function useThemeContext() {
   return useContext(ThemeContext) as ThemeContextType;
 }
-

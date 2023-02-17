@@ -7,8 +7,8 @@
 
 html,
 body {
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-        Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+        Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
@@ -21,8 +21,8 @@ p {
     padding: 0;
 }
 
-/* @tailwind base; */
-@tailwind base;
+/* @tailwind 基础预设样式/组件样式/工具样式 */
+// @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -31,5 +31,9 @@ p {
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    .margin-center {
+        margin: 0 auto;
     }
 }

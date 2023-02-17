@@ -1,0 +1,21 @@
+{
+    "token": {
+        "colorPrimary": "#000000",
+        "colorSuccess": "#6ae62c",
+        "colorWarning": "#fdb82e",
+        "colorError": "#ff1d21",
+        "colorInfo": "#6ea6f5",
+        "borderRadius": 10,
+        "wireframe": true,
+        "colorTextBase": "#000000",
+        "colorBgBase": "#ffffff",
+        "colorTextSecondary": "#000000"
+    },
+    "components": {
+        "Menu": {
+            "radiusSubMenuItem": 6,
+            "borderRadiusSM": 6,
+            "radiusItem": 6
+        }
+    }
+}
