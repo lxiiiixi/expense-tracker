@@ -1,23 +1,22 @@
 import { useState } from "react";
-import { Button, Form, Input, Popconfirm, Table, Typography, Select, Card } from "antd";
-import demoData from "../../../demoData";
+import { Button, Form, Input, Popconfirm, Table, Typography, Select, Card, Space } from "antd";
 import type { DatePickerProps } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { Item, RowSpanData } from "./interface";
+import { Item, RowSpanData, AccountTableProps } from "./interface";
 import EditableCell from "./EditableCell";
 import TableFooter from "./TableFooter";
 import getColumns from "./columns";
 
-const originData: Item[] = demoData;
 const defaultDate = dayjs(dayjs(new Date()).format("YYYY-MM-DD")); // dayjs([]) returns the current time.
 
-export default function AccountTable() {
+export default function AccountTable({ tableData, title, chanegeData }: AccountTableProps) {
     const [form] = Form.useForm();
-    const [data, setData] = useState(originData);
     const [editingKey, setEditingKey] = useState("");
-    const [addDate, setAddDate] = useState(defaultDate.format("YYYY-MM-DD"));
-    const [categoryList, setCategoryList] = useState<string[]>(["life", "traffic"]);
+    const [addDate, setAddDate] = useState(defaultDate.format("YYYY-MM-DD")); // DataPicker的时间值
+    const [categoryList, setCategoryList] = useState<string[]>(["life", "traffic", "save"]);
+    const [searchValue, setSearchValue] = useState("");
+    const [selectCategory, setSelectCategory] = useState("All");
 
     dayjs.extend(customParseFormat);
 
@@ -27,7 +26,7 @@ export default function AccountTable() {
     };
 
     const deleteItem = (record: Partial<Item> & { key: React.Key }) => {
-        setData(data.filter((item) => item.key !== record.key));
+        chanegeData(tableData.filter((item) => item.key !== record.key));
     };
 
     const cancel = () => {
@@ -38,7 +37,7 @@ export default function AccountTable() {
         try {
             const row = (await form.validateFields()) as Item;
 
-            const newData = [...data];
+            const newData = [...tableData];
             const index = newData.findIndex((item) => key === item.key);
             if (index > -1) {
                 const item = newData[index];
@@ -46,11 +45,11 @@ export default function AccountTable() {
                     ...item,
                     ...row,
                 });
-                setData(newData);
+                chanegeData(newData);
                 setEditingKey("");
             } else {
                 newData.push(row);
-                setData(newData);
+                chanegeData(newData);
                 setEditingKey("");
             }
         } catch (errInfo) {
@@ -60,15 +59,14 @@ export default function AccountTable() {
 
     const addRow = () => {
         const newKey = new Date().getTime().toString();
-
         const obj = {
             key: newKey,
-            price: 0,
+            cost: 0,
             description: "",
             time: addDate,
             category: categoryList[0],
         };
-        setData([...data, obj]);
+        chanegeData([...tableData, obj]);
         setEditingKey(newKey);
     };
 
@@ -77,6 +75,7 @@ export default function AccountTable() {
     };
 
     // sort by time => get RowSpanData[]
+    // 先按照时间排序 => 获得增加了Row属性的对象数字(用于时间列的合并)
     const getRowSpanData = (arr: Item[]): RowSpanData[] => {
         let names: Array<string> = [];
         return arr
@@ -92,24 +91,61 @@ export default function AccountTable() {
             });
     };
 
-    const handleSearch = () => {};
+    const handleSearch = (seachValue: string, selectValue: string, tableData: Item[]) => {
+        const filteredData = tableData.filter((value) => {
+            return (
+                value.time.toLowerCase().includes(seachValue.toLowerCase()) ||
+                value.category.toLowerCase().includes(seachValue.toLowerCase()) ||
+                value.cost.toString().toLowerCase().includes(seachValue.toLowerCase()) ||
+                value.description.toString().toLowerCase().includes(seachValue.toLowerCase())
+            );
+        });
+        if (selectValue === "All") {
+            return filteredData;
+        } else {
+            return filteredData.filter(
+                (item) => item.category.toLowerCase() === selectValue.toLowerCase()
+            );
+        }
+    };
 
     const mergedColumns = getColumns(editingKey, save, cancel, editItem, deleteItem, categoryList);
+    const totalData = handleSearch(searchValue, selectCategory, getRowSpanData(tableData))
+        .map((item) => item.cost)
+        .reduce((cost1, cost2) => cost1 + cost2);
 
     return (
         <Card
             title={
                 <div className="text-left">
-                    <span className="text-2xl">Jan.</span> <span className="text-sm">2023</span>
+                    <span className="text-2xl">{title}</span> <span className="text-sm">2023</span>
                 </div>
             }
             extra={
-                <div>
-                    {" "}
-                    <Input placeholder="Search" allowClear onChange={handleSearch} />
-                </div>
+                <Space className="flex">
+                    <Select
+                        placeholder="Category"
+                        style={{ width: 120 }}
+                        onChange={(value) => {
+                            setSelectCategory(value);
+                        }}
+                        options={[
+                            { value: "All", label: "All" },
+                            ...categoryList.map((item) => ({
+                                value: item,
+                                label: item,
+                            })),
+                        ]}
+                    />
+                    <Input
+                        placeholder="Search"
+                        allowClear
+                        onChange={(e) => {
+                            setSearchValue(e.target.value);
+                        }}
+                    />
+                </Space>
             }
-            style={{ padding: 0 }}
         >
             <Form form={form} component={false}>
                 <Table
@@ -119,12 +155,16 @@ export default function AccountTable() {
                         },
                     }}
                     // bordered
-                    dataSource={getRowSpanData(data)}
-                    columns={mergedColumns}
-                    rowClassName="editable-row"
                     // pagination={{
                     //     onChange: cancel,
                     // }}
+                    dataSource={handleSearch(
+                        searchValue,
+                        selectCategory,
+                        getRowSpanData(tableData)
+                    )}
+                    columns={mergedColumns}
+                    rowClassName="editable-row"
                     pagination={false}
                     size="small"
                     footer={() => {
@@ -133,6 +173,7 @@ export default function AccountTable() {
                                 onChange={onChange}
                                 addRow={addRow}
                                 defaultDate={defaultDate}
+                                totalData={totalData}
                             />
                         );
                     }}

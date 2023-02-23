@@ -48,7 +48,6 @@ const FullPieConfig = ({ title = "", subtitle = "", data }: FullPieConfigProps) 
                                 baseline: "middle",
                                 fontFamily: "微软雅黑",
                                 fontSize: 12,
-                                fontWeight: "normal",
                             },
                         },
                     },

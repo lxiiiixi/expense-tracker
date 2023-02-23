@@ -1,5 +1,7 @@
-import { Popconfirm, Typography, Space } from "antd";
-import { RowSpanData, Item } from "./interface";
+import { Popconfirm, Typography, Space, Button } from "antd";
+import { FormOutlined } from "@ant-design/icons";
+import { RowSpanData, Item, EditableCellProps } from "./interface";
+import type { ColumnType } from "antd/es/table";
 
 export default function getColumns(
     editingKey: string,
@@ -11,9 +13,9 @@ export default function getColumns(
 ) {
     const isEditing = (record: Item) => record.key === editingKey;
 
-    const columns = [
+    const columns: ColumnType<> = [
         {
-            title: "time",
+            title: "Time",
             dataIndex: "time",
             width: "20%",
             editable: false,
@@ -25,28 +27,36 @@ export default function getColumns(
             },
         },
         {
-            title: "category",
+            title: (
+                <span>
+                    Category
+                    <span className="ml-1 text-xs font-light">
+                        <FormOutlined />
+                    </span>
+                </span>
+            ),
+            // title: "Category",
             dataIndex: "category",
             width: "20%",
             align: "center" as "center",
             editable: true,
         },
         {
-            title: "description",
+            title: "Description",
             dataIndex: "description",
             width: "30%",
             align: "center" as "center",
             editable: true,
         },
         {
-            title: "price",
-            dataIndex: "price",
+            title: "Cost",
+            dataIndex: "cost",
             width: "15%",
             align: "center" as "center",
             editable: true,
         },
         {
-            title: "operation",
+            title: "Operation",
             dataIndex: "operation",
             align: "center" as "center",
             render: (_: any, record: RowSpanData) => {
@@ -60,18 +70,12 @@ export default function getColumns(
                     </Space>
                 ) : (
                     <Space>
-                        <Typography.Link
-                            disabled={editingKey !== ""}
-                            onClick={() => editItem(record)}
-                        >
+                        <Button type="primary" onClick={() => editItem(record)}>
                             Edit
-                        </Typography.Link>
-                        <Typography.Link
-                            disabled={editingKey !== ""}
-                            onClick={() => deleteItem(record)}
-                        >
-                            Delete
-                        </Typography.Link>
+                        </Button>
+                        <Popconfirm title="Sure to delete?" onConfirm={() => deleteItem(record)}>
+                            <Button>Delete</Button>
+                        </Popconfirm>
                     </Space>
                 );
             },
@@ -79,7 +83,7 @@ export default function getColumns(
     ];
 
     // 为设置了 editable 的项加上 onCell 属性
-    const getMergedColumns = () => {
+    const getMergedColumns = function () {
         return columns.map((col) => {
             if (!col.editable) {
                 return col;
@@ -97,5 +101,8 @@ export default function getColumns(
             };
         });
     };
+
     return getMergedColumns();
 }
+
+export const dynamicColoumns = [{ name: "description", type: "Input" }];

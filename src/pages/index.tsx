@@ -1,10 +1,32 @@
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import PageLayout from "@/components/PageLayout";
 import { Row, Col } from "antd";
 import AccountTable from "@/components/AccountTable";
 import CardsContainer from "@/components/CardsContainer";
+import { Item } from "@/components/AccountTable/interface";
+
+import demoData from "../../demoData.js";
+const originAllData: Item[] = demoData;
 
 const Index = () => {
+    const [nowDisplay, setNowDisplay] = useState("2023-02");
+    const [tableData, setTableData] = useState<Item[]>(originAllData);
+    const filterData = (originData: Item[], nowDisplay: string) => {
+        return originData.filter((item) => {
+            const [y, m, d] = item.time.split("-");
+            return `${y}-${m}` === nowDisplay;
+        });
+    };
+
+    const chanegeData = (newData: Item[]) => {
+        setTableData(newData);
+    };
+
+    useEffect(() => {
+        console.log(tableData);
+    }, [tableData]);
+
     return (
         <>
             <Head>
@@ -15,12 +37,16 @@ const Index = () => {
             </Head>
             <PageLayout>
                 <Row>
-                    <Col span={16}>
+                    <Col xs={24} sm={24} md={24} lg={16}>
                         <div className="mt-10">
-                            <AccountTable />
+                            <AccountTable
+                                title="Feb."
+                                tableData={filterData(tableData, nowDisplay)}
+                                chanegeData={chanegeData}
+                            />
                         </div>
                     </Col>
-                    <Col span={8} className="flex justify-end py-6 pl-10">
+                    <Col xs={24} sm={24} md={24} lg={8} className="flex justify-end py-6 pl-10">
                         <CardsContainer />
                     </Col>
                 </Row>

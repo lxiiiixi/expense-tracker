@@ -5,10 +5,12 @@ const TableFooter = ({
     onChange,
     addRow,
     defaultDate,
+    totalData,
 }: {
     onChange: DatePickerProps["onChange"];
     addRow: () => void;
     defaultDate: any;
+    totalData: number;
 }) => {
     return (
         <div className="flex justify-between">
@@ -17,8 +19,9 @@ const TableFooter = ({
                 <Button onClick={addRow}>Add</Button>
             </Space>
             <Space>
-                <span>Most:355</span>
-                <span>Total:4235</span>
+                <span>
+                    Total:<span className=" mx-2 text-xl text-red-500">{totalData}</span>
+                </span>
             </Space>
         </div>
     );

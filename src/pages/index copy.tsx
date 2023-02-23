@@ -14,7 +14,7 @@ interface Item {
     key: string;
     time: string;
     category: string;
-    price: number;
+    cost: number;
     description: string;
 }
 // 时间 项目(选择) 说明
@@ -150,8 +150,8 @@ export default function Home() {
             editable: true,
         },
         {
-            title: "price",
-            dataIndex: "price",
+            title: "cost",
+            dataIndex: "cost",
             width: "15%",
             align: "center" as "center",
             editable: true,
@@ -211,7 +211,7 @@ export default function Home() {
 
         const obj = {
             key: newKey,
-            price: 0,
+            cost: 0,
             description: "",
             time: addDate,
             category: category[0],
