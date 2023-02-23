@@ -22,7 +22,15 @@ p {
 }
 
 /* @tailwind 基础预设样式/组件样式/工具样式 */
-// @tailwind base;
+@tailwind base;
+@layer base {
+    h1 {
+        @apply text-2xl;
+    }
+    h2 {
+        @apply text-xl;
+    }
+}
 @tailwind components;
 @tailwind utilities;
 

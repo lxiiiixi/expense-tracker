@@ -1,7 +1,8 @@
 import Head from "next/head";
 import PageLayout from "@/components/PageLayout";
-
+import { Row, Col } from "antd";
 import AccountTable from "@/components/AccountTable";
+import CardsContainer from "@/components/CardsContainer";
 
 const Index = () => {
     return (
@@ -13,9 +14,16 @@ const Index = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <PageLayout>
-                <div className="mt-20 w-4/5">
-                    <AccountTable />
-                </div>
+                <Row>
+                    <Col span={16}>
+                        <div className="mt-10">
+                            <AccountTable />
+                        </div>
+                    </Col>
+                    <Col span={8} className="flex justify-end py-6 pl-10">
+                        <CardsContainer />
+                    </Col>
+                </Row>
             </PageLayout>
         </>
     );

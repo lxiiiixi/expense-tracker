@@ -26,7 +26,7 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
                     <Sider />
                 </Layout.Sider>
                 <Layout>
-                    <Layout.Content className="min-h-screen overflow-y-scroll text-center">
+                    <Layout.Content className="min-h-screen overflow-scroll text-center">
                         <div>{children}</div>
                         {/* <Footer /> */}
                     </Layout.Content>

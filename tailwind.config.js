@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors')
 module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx}",
@@ -6,6 +7,22 @@ module.exports = {
   ],
   theme: {
     extend: {},
+    colors: {
+      levelColor: {
+        'warning': '#FCF26B',
+        'danger': '#F76560',
+        'safe': '#5B8FF9',
+      },
+      textGary: '#58647B',
+      transparent: 'transparent',
+      current: 'currentColor',
+      black: colors.black,
+      white: colors.white,
+      gray: colors.neutral,
+      indigo: colors.indigo,
+      red: colors.rose,
+      yellow: colors.amber,
+    },
     fontSize: {
       'xs': ['12px', '14px'],
       'sm': ['14px', '1.5em'],
@@ -23,5 +40,8 @@ module.exports = {
   },
   plugins: [
     require('tailwindcss-debug-screens'),
-  ]
+  ],
+  corePlugins: {
+    preflight: false
+  }
 }

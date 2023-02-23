@@ -43,19 +43,17 @@ Success! Created expense-tracker at /Users/liuxi/Desktop/Github/expense-tracker
 删除不必要的初始化内容，本项目也不打算用模块样式
 
 安装 tailwindcss 按照官网步骤来 https://tailwindcss.com/docs/installation/using-postcss
+关于 tailwind 和 antd 的样式冲突解决：https://dev.to/fabiobiondi/react-antd-and-tailwind-fix-css-conflicts-5542
 
 ```js
 // 注意config
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx}",
-    "./src/components/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
+    content: ["./src/pages/**/*.{js,ts,jsx,tsx}", "./src/components/**/*.{js,ts,jsx,tsx}"],
+    theme: {
+        extend: {},
+    },
+    plugins: [],
 };
 ```
 
@@ -75,10 +73,10 @@ $ yarn add sass
 > const withTM = require("next-transpile-modules")(["echarts", "zrender"]);
 >
 > const nextConfig = withTM({
->   reactStrictMode: true,
->   sassOptions: {
->     includePaths: [path.join(__dirname, "styles")],
->   },
+>     reactStrictMode: true,
+>     sassOptions: {
+>         includePaths: [path.join(__dirname, "styles")],
+>     },
 > });
 >
 > module.exports = nextConfig;
@@ -108,3 +106,33 @@ https://github.com/jorenvanhee/tailwindcss-debug-screens
 
 Github：https://github.com/tailwindlabs/prettier-plugin-tailwindcss
 Official：https://tailwindcss.com/blog/automatic-class-sorting-with-prettier#how-classes-are-sorted
+
+## Echarts 图表的使用
+
+echarts-for-react：https://git.hust.cc/echarts-for-react/
+但是要注意在 next.config.js 中加上一些配置：
+
+```js
+yarn add next-transpile-modules
+
+/** @type {import('next').NextConfig} */
+const path = require('path');
+const withTM = require("next-transpile-modules")(["echarts", "zrender"]);
+
+const nextConfig = withTM({
+  reactStrictMode: true,
+  sassOptions: {
+    includePaths: [path.join(__dirname, 'styles')],
+  },
+})
+module.exports = nextConfig
+
+并用withTM包裹导出的config 否则会报错如下：
+error - /Users/liuxi/Desktop/Github/expense-tracker/node_modules/echarts/core.js:20
+export * from './lib/export/core.js';
+^^^^^^
+SyntaxError: Unexpected token 'export'
+    at Object.compileFunction (node:vm:352:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1026:15)
+    at Module._compile (node:internal/modules/cjs/loader:1061:27)
+```

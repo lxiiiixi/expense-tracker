@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Form, Input, Popconfirm, Table, Typography, Select } from "antd";
+import { Button, Form, Input, Popconfirm, Table, Typography, Select, Card } from "antd";
 import demoData from "../../../demoData";
 import type { DatePickerProps } from "antd";
 import dayjs from "dayjs";
@@ -92,35 +92,52 @@ export default function AccountTable() {
             });
     };
 
+    const handleSearch = () => {};
+
     const mergedColumns = getColumns(editingKey, save, cancel, editItem, deleteItem, categoryList);
 
     return (
-        <Form form={form} component={false}>
-            <Table
-                components={{
-                    body: {
-                        cell: EditableCell,
-                    },
-                }}
-                bordered
-                dataSource={getRowSpanData(data)}
-                columns={mergedColumns}
-                rowClassName="editable-row"
-                // pagination={{
-                //     onChange: cancel,
-                // }}
-                pagination={false}
-                size="small"
-                footer={() => {
-                    return (
-                        <TableFooter
-                            onChange={onChange}
-                            addRow={addRow}
-                            defaultDate={defaultDate}
-                        />
-                    );
-                }}
-            />
-        </Form>
+        <Card
+            title={
+                <div className="text-left">
+                    <span className="text-2xl">Jan.</span> <span className="text-sm">2023</span>
+                </div>
+            }
+            extra={
+                <div>
+                    {" "}
+                    <Input placeholder="Search" allowClear onChange={handleSearch} />
+                </div>
+            }
+            style={{ padding: 0 }}
+        >
+            <Form form={form} component={false}>
+                <Table
+                    components={{
+                        body: {
+                            cell: EditableCell,
+                        },
+                    }}
+                    // bordered
+                    dataSource={getRowSpanData(data)}
+                    columns={mergedColumns}
+                    rowClassName="editable-row"
+                    // pagination={{
+                    //     onChange: cancel,
+                    // }}
+                    pagination={false}
+                    size="small"
+                    footer={() => {
+                        return (
+                            <TableFooter
+                                onChange={onChange}
+                                addRow={addRow}
+                                defaultDate={defaultDate}
+                            />
+                        );
+                    }}
+                />
+            </Form>
+        </Card>
     );
 }
