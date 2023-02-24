@@ -27,7 +27,15 @@ const EditableCell: React.FC<EditableCellProps> = ({
     return (
         <td {...restProps}>
             {editing ? (
-                <Form.Item name={dataIndex} style={{ margin: 0 }}>
+                <Form.Item
+                    name={dataIndex}
+                    rules={
+                        dataIndex === "cost" || dataIndex === "category"
+                            ? [{ required: true, message: `Input the ${dataIndex}!` }]
+                            : [{ required: false }]
+                    }
+                    style={{ margin: 0 }}
+                >
                     {inputNode}
                 </Form.Item>
             ) : (

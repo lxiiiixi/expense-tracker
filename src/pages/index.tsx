@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import PageLayout from "@/components/PageLayout";
-import { Row, Col } from "antd";
+import { Row, Col, Card, Space } from "antd";
 import AccountTable from "@/components/AccountTable";
-import CardsContainer from "@/components/CardsContainer";
 import { Item } from "@/components/AccountTable/interface";
+import FullPie from "@/components/Echarts/PieChart";
+import { getPieChart } from "@/utils/getCardFunc";
 
 import demoData from "../../demoData.js";
 const originAllData: Item[] = demoData;
@@ -18,6 +19,7 @@ const Index = () => {
             return `${y}-${m}` === nowDisplay;
         });
     };
+    const displayData = filterData(tableData, nowDisplay);
 
     const chanegeData = (newData: Item[]) => {
         setTableData(newData);
@@ -41,13 +43,23 @@ const Index = () => {
                         <div className="mt-10">
                             <AccountTable
                                 title="Feb."
-                                tableData={filterData(tableData, nowDisplay)}
+                                tableData={displayData}
                                 chanegeData={chanegeData}
                             />
                         </div>
                     </Col>
                     <Col xs={24} sm={24} md={24} lg={8} className="flex justify-end py-6 pl-10">
-                        <CardsContainer />
+                        <div className="bg-slate-100 h-auto w-full rounded-l-xl py-4 px-6 shadow-xl">
+                            <h2 className="text-left">Cards</h2>
+                            <div className="flex flex-col">
+                                <Card className="my-2 shadow-sm hover:shadow-lg">
+                                    <FullPie data={getPieChart(displayData)} />
+                                </Card>
+                                <Card className="my-2 shadow-sm hover:shadow-lg">
+                                    {/* <FullPie data={LiquidityTableData} /> */}
+                                </Card>
+                            </div>
+                        </div>
                     </Col>
                 </Row>
             </PageLayout>

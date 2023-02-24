@@ -8,6 +8,7 @@ import EditableCell from "./EditableCell";
 import TableFooter from "./TableFooter";
 import getColumns from "./columns";
 
+// 还有一个bug：可能是输入框里有记录 每次Add之后会记录的时候默认输入框里会显示上一次的数据 而不是空的表单框
 const defaultDate = dayjs(dayjs(new Date()).format("YYYY-MM-DD")); // dayjs([]) returns the current time.
 
 export default function AccountTable({ tableData, title, chanegeData }: AccountTableProps) {
@@ -36,6 +37,8 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
     const save = async (key: React.Key) => {
         try {
             const row = (await form.validateFields()) as Item;
+            const addedData = { ...row, cost: Number(row.cost) };
+            console.log(row, addedData);
 
             const newData = [...tableData];
             const index = newData.findIndex((item) => key === item.key);
@@ -43,12 +46,13 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
                 const item = newData[index];
                 newData.splice(index, 1, {
                     ...item,
-                    ...row,
+                    ...addedData,
                 });
+
                 chanegeData(newData);
                 setEditingKey("");
             } else {
-                newData.push(row);
+                newData.push(addedData);
                 chanegeData(newData);
                 setEditingKey("");
             }
@@ -67,6 +71,8 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
             category: categoryList[0],
         };
         chanegeData([...tableData, obj]);
+        // 这里由于异步的原因 即使chanegeData更新了 但setEditingKey之后输入框不会默认值
+        // 但是正常的用户体验是应该如此
         setEditingKey(newKey);
     };
 
@@ -110,9 +116,10 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
     };
 
     const mergedColumns = getColumns(editingKey, save, cancel, editItem, deleteItem, categoryList);
-    const totalData = handleSearch(searchValue, selectCategory, getRowSpanData(tableData))
-        .map((item) => item.cost)
-        .reduce((cost1, cost2) => cost1 + cost2);
+    const dataSource = handleSearch(searchValue, selectCategory, getRowSpanData(tableData));
+    const totalData = dataSource.length
+        ? dataSource.map((item) => item.cost).reduce((cost1, cost2) => cost1 + cost2)
+        : 0; // 如果筛选后是空数组就直接为0了 Reduce of empty array with no initial value
 
     return (
         <Card
@@ -158,11 +165,7 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
                     // pagination={{
                     //     onChange: cancel,
                     // }}
-                    dataSource={handleSearch(
-                        searchValue,
-                        selectCategory,
-                        getRowSpanData(tableData)
-                    )}
+                    dataSource={dataSource}
                     columns={mergedColumns}
                     rowClassName="editable-row"
                     pagination={false}

@@ -23,7 +23,7 @@ const FullPieConfig = ({ title = "", subtitle = "", data }: FullPieConfigProps) 
                 left: "center",
                 itemWidth: 18,
                 itemHeight: 10,
-                orient: "vertical",
+                // orient: "vertical",
                 itemGap: 4,
             },
             series: [
