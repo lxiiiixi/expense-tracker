@@ -1,7 +1,15 @@
-import { Popconfirm, Typography, Space, Button } from "antd";
+import { Popconfirm, Typography, Space, Button, Table, Popover, Select } from "antd";
 import { FormOutlined } from "@ant-design/icons";
-import { RowSpanData, Item, EditableCellProps } from "./interface";
-import type { ColumnType } from "antd/es/table";
+import { RowSpanData, Item } from "./interface";
+import { Config } from "@/context/config_provider";
+import type { SelectProps } from "antd";
+
+type EditableTableProps = Parameters<typeof Table>[0];
+type ColumnTypes = Exclude<EditableTableProps["columns"], undefined>;
+type ExtendColumnTypes = {
+    editable?: boolean;
+    dataIndex: string;
+};
 
 export default function getColumns(
     editingKey: string,
@@ -9,20 +17,59 @@ export default function getColumns(
     cancel: () => void,
     editItem: (record: Partial<Item> & { key: React.Key }) => void,
     deleteItem: (record: Partial<Item> & { key: React.Key }) => void,
-    categoryList: string[]
+    config: Config,
+    changeConfig: (config: Config) => void
 ) {
+    const categoryList = config.category;
     const isEditing = (record: Item) => record.key === editingKey;
+    let newCategory: string[] = [];
+    const handleEditCategory = (value: string[]) => {
+        newCategory = value;
+    };
 
-    const columns: ColumnType<> = [
+    const handleCategory = () => {
+        changeConfig({ ...config, category: newCategory });
+    };
+
+    const defaultOptions: SelectProps["options"] = [
+        {
+            value: "Life",
+            label: "Life",
+        },
+        {
+            value: "Traffic",
+            label: "Traffic",
+        },
+    ];
+
+    const editCategoryContent = (
+        <>
+            <Select
+                mode="tags"
+                className="p-2"
+                size="large"
+                style={{ minWidth: "260px" }}
+                placeholder="Input a category and enter"
+                onChange={handleEditCategory}
+                options={defaultOptions}
+                defaultValue={categoryList}
+            />
+            <Button size="large" onClick={handleCategory}>
+                Confirm
+            </Button>
+        </>
+    );
+
+    const columns: (ColumnTypes[number] & ExtendColumnTypes)[] = [
         {
             title: "Time",
             dataIndex: "time",
             width: "20%",
             editable: false,
             align: "center" as "center",
-            onCell: (record: RowSpanData) => {
+            onCell: (record: object) => {
                 return {
-                    rowSpan: record.rowSpan,
+                    rowSpan: (record as RowSpanData).rowSpan,
                 };
             },
         },
@@ -30,9 +77,14 @@ export default function getColumns(
             title: (
                 <span>
                     Category
-                    <span className="ml-1 text-xs font-light">
+                    <Popover
+                        className="ml-1 text-xs font-light"
+                        placement="top"
+                        content={editCategoryContent}
+                        trigger="click"
+                    >
                         <FormOutlined />
-                    </span>
+                    </Popover>
                 </span>
             ),
             // title: "Category",
@@ -59,21 +111,25 @@ export default function getColumns(
             title: "Operation",
             dataIndex: "operation",
             align: "center" as "center",
-            render: (_: any, record: RowSpanData) => {
-                const editable = isEditing(record);
+            render: (_: any, record: object) => {
+                const recordItem = record as Item;
+                const editable = isEditing(recordItem);
                 return editable ? (
                     <Space>
-                        <Typography.Link onClick={() => save(record.key)}>Save</Typography.Link>
+                        <Typography.Link onClick={() => save(recordItem.key)}>Save</Typography.Link>
                         <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
                             <a>Cancel</a>
                         </Popconfirm>
                     </Space>
                 ) : (
                     <Space>
-                        <Button type="primary" onClick={() => editItem(record)}>
+                        <Button type="primary" onClick={() => editItem(recordItem)}>
                             Edit
                         </Button>
-                        <Popconfirm title="Sure to delete?" onConfirm={() => deleteItem(record)}>
+                        <Popconfirm
+                            title="Sure to delete?"
+                            onConfirm={() => deleteItem(recordItem)}
+                        >
                             <Button>Delete</Button>
                         </Popconfirm>
                     </Space>
@@ -83,18 +139,19 @@ export default function getColumns(
     ];
 
     // 为设置了 editable 的项加上 onCell 属性
-    const getMergedColumns = function () {
+    const getMergedColumns: any = function () {
         return columns.map((col) => {
             if (!col.editable) {
                 return col;
             }
+
             return {
                 ...col,
-                onCell: (record: Item) => ({
+                onCell: (record: RowSpanData) => ({
                     record,
                     inputType: col.dataIndex === "category" ? "select" : "text",
                     dataIndex: col.dataIndex,
-                    title: col.title,
+                    // title: col.title,
                     editing: isEditing(record),
                     categoryList,
                 }),

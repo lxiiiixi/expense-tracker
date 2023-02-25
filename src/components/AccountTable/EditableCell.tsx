@@ -4,7 +4,6 @@ import { EditableCellProps } from "./interface";
 const EditableCell: React.FC<EditableCellProps> = ({
     editing,
     dataIndex,
-    title,
     record,
     index,
     inputType,
@@ -31,7 +30,20 @@ const EditableCell: React.FC<EditableCellProps> = ({
                     name={dataIndex}
                     rules={
                         dataIndex === "cost" || dataIndex === "category"
-                            ? [{ required: true, message: `Input the ${dataIndex}!` }]
+                            ? [
+                                  { required: true, message: `Input the ${dataIndex}!` },
+                                  dataIndex === "cost"
+                                      ? ({ getFieldValue }) => ({
+                                            validator(_, value) {
+                                                // !""===true
+                                                if (!isNaN(Number(value))) {
+                                                    return Promise.resolve();
+                                                }
+                                                return Promise.reject(new Error("Input A Number!"));
+                                            },
+                                        })
+                                      : {},
+                              ]
                             : [{ required: false }]
                     }
                     style={{ margin: 0 }}

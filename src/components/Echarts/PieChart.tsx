@@ -39,17 +39,13 @@ const FullPieConfig = ({ title = "", subtitle = "", data }: FullPieConfigProps) 
                         borderWidth: 2,
                     },
                     label: {
-                        normal: {
-                            show: true,
-                            position: "inside",
-                            formatter: "{d}%", // {a}、{b}、{c}、{d}，分别表示系列名、数据名、数据值、百分比
-                            textStyle: {
-                                align: "center",
-                                baseline: "middle",
-                                fontFamily: "微软雅黑",
-                                fontSize: 12,
-                            },
-                        },
+                        show: true,
+                        position: "inside",
+                        formatter: "{d}%", // {a}、{b}、{c}、{d}，分别表示系列名、数据名、数据值、百分比
+                        align: "center",
+                        baseline: "middle",
+                        fontFamily: "微软雅黑",
+                        fontSize: 12,
                     },
                     labelLine: {
                         show: false,

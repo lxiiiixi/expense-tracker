@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Form, Input, Popconfirm, Table, Typography, Select, Card, Space } from "antd";
 import type { DatePickerProps } from "antd";
 import dayjs from "dayjs";
@@ -7,17 +7,19 @@ import { Item, RowSpanData, AccountTableProps } from "./interface";
 import EditableCell from "./EditableCell";
 import TableFooter from "./TableFooter";
 import getColumns from "./columns";
+import { useConfigContext } from "@/context/config_provider";
 
 // 还有一个bug：可能是输入框里有记录 每次Add之后会记录的时候默认输入框里会显示上一次的数据 而不是空的表单框
 const defaultDate = dayjs(dayjs(new Date()).format("YYYY-MM-DD")); // dayjs([]) returns the current time.
 
 export default function AccountTable({ tableData, title, chanegeData }: AccountTableProps) {
     const [form] = Form.useForm();
+    const { config, changeConfig } = useConfigContext();
     const [editingKey, setEditingKey] = useState("");
     const [addDate, setAddDate] = useState(defaultDate.format("YYYY-MM-DD")); // DataPicker的时间值
-    const [categoryList, setCategoryList] = useState<string[]>(["life", "traffic", "save"]);
     const [searchValue, setSearchValue] = useState("");
     const [selectCategory, setSelectCategory] = useState("All");
+    const categoryList = config.category; // 直接使用会被使用useState定义少一次render
 
     dayjs.extend(customParseFormat);
 
@@ -116,12 +118,19 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
         }
     };
 
-    const mergedColumns = getColumns(editingKey, save, cancel, editItem, deleteItem, categoryList);
-    const dataSource = handleSearch(searchValue, selectCategory, getRowSpanData(tableData));
+    const mergedColumns = getColumns(
+        editingKey,
+        save,
+        cancel,
+        editItem,
+        deleteItem,
+        config,
+        changeConfig
+    );
+    const dataSource = handleSearch(searchValue, selectCategory, tableData);
     const totalData = dataSource.length
         ? dataSource.map((item) => item.cost).reduce((cost1, cost2) => cost1 + cost2)
         : 0; // 如果筛选后是空数组就直接为0了 Reduce of empty array with no initial value
-
     return (
         <Card
             className="rounded-3xl"
@@ -167,7 +176,7 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
                     // pagination={{
                     //     onChange: cancel,
                     // }}
-                    dataSource={dataSource}
+                    dataSource={getRowSpanData(dataSource)}
                     columns={mergedColumns}
                     rowClassName="editable-row"
                     pagination={false}

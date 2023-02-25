@@ -23,7 +23,6 @@ export interface RowSpanData extends Item {
 export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
     editing: boolean;
     dataIndex: string;
-    title: any;
     inputType: "select" | "text";
     record: Item;
     index: number;

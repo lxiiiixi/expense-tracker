@@ -41,7 +41,7 @@ const Index = () => {
             <PageLayout>
                 <Row>
                     <Col xs={24} sm={24} md={24} lg={16}>
-                        <div className="ml-10">
+                        <div className="mx-5 lg:mx-0 lg:ml-10">
                             <AccountTable
                                 title="Feb."
                                 tableData={displayData}
@@ -49,7 +49,7 @@ const Index = () => {
                             />
                         </div>
                     </Col>
-                    <Col xs={24} sm={24} md={24} lg={8} className="pl-10">
+                    <Col xs={24} sm={24} md={24} lg={8} className="p-5 lg:p-0 lg:pl-10">
                         {/* <div className="h-auto w-full rounded-l-xl bg-white py-4 px-6 shadow-xl">
                             <h2 className="text-left">Cards</h2>
                             <div className="flex flex-col">
@@ -62,7 +62,7 @@ const Index = () => {
                         </div> */}
                         <Card
                             title={<div className="text-left">Card</div>}
-                            className="rounded-none rounded-l-3xl"
+                            className="rounded-3xl lg:rounded-none lg:rounded-l-3xl"
                             extra={
                                 <Input
                                     placeholder="Search"
