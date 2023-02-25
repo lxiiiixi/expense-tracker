@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import PageLayout from "@/components/PageLayout";
-import { Row, Col, Card, Space } from "antd";
+import { Row, Col, Card, Space, Input } from "antd";
 import AccountTable from "@/components/AccountTable";
 import { Item } from "@/components/AccountTable/interface";
 import FullPie from "@/components/Echarts/PieChart";
 import { getPieChart } from "@/utils/getCardFunc";
+import Sider from "@/components/Sider";
 
 import demoData from "../../demoData.js";
 const originAllData: Item[] = demoData;
@@ -40,7 +41,7 @@ const Index = () => {
             <PageLayout>
                 <Row>
                     <Col xs={24} sm={24} md={24} lg={16}>
-                        <div className="mt-10">
+                        <div className="ml-10">
                             <AccountTable
                                 title="Feb."
                                 tableData={displayData}
@@ -48,18 +49,35 @@ const Index = () => {
                             />
                         </div>
                     </Col>
-                    <Col xs={24} sm={24} md={24} lg={8} className="flex justify-end py-6 pl-10">
-                        <div className="bg-slate-100 h-auto w-full rounded-l-xl py-4 px-6 shadow-xl">
+                    <Col xs={24} sm={24} md={24} lg={8} className="pl-10">
+                        {/* <div className="h-auto w-full rounded-l-xl bg-white py-4 px-6 shadow-xl">
                             <h2 className="text-left">Cards</h2>
                             <div className="flex flex-col">
                                 <Card className="my-2 shadow-sm hover:shadow-lg">
                                     <FullPie data={getPieChart(displayData)} />
                                 </Card>
                                 <Card className="my-2 shadow-sm hover:shadow-lg">
-                                    {/* <FullPie data={LiquidityTableData} /> */}
                                 </Card>
                             </div>
-                        </div>
+                        </div> */}
+                        <Card
+                            title={<div className="text-left">Card</div>}
+                            className="rounded-none rounded-l-3xl"
+                            extra={
+                                <Input
+                                    placeholder="Search"
+                                    allowClear
+                                    onChange={(e) => {
+                                        // setSearchValue(e.target.value);
+                                    }}
+                                />
+                            }
+                        >
+                            <Card className="my-2 shadow-sm hover:shadow-lg">
+                                <FullPie data={getPieChart(displayData)} />
+                            </Card>
+                            <Card className="my-2 shadow-sm hover:shadow-lg"></Card>
+                        </Card>
                     </Col>
                 </Row>
             </PageLayout>

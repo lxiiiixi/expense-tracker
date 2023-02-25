@@ -22,7 +22,7 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
     dayjs.extend(customParseFormat);
 
     const editItem = (record: Partial<Item> & { key: React.Key }) => {
-        form.setFieldsValue({ name: "", age: "", address: "", ...record });
+        form.setFieldsValue({ category: "", description: "", cost: "", ...record });
         setEditingKey(record.key);
     };
 
@@ -73,6 +73,7 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
         chanegeData([...tableData, obj]);
         // 这里由于异步的原因 即使chanegeData更新了 但setEditingKey之后输入框不会默认值
         // 但是正常的用户体验是应该如此
+        form.setFieldsValue({ category: "", description: "", cost: "" });
         setEditingKey(newKey);
     };
 
@@ -123,6 +124,7 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
 
     return (
         <Card
+            className="rounded-3xl"
             title={
                 <div className="text-left">
                     <span className="text-2xl">{title}</span> <span className="text-sm">2023</span>

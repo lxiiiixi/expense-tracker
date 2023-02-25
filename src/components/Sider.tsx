@@ -14,7 +14,7 @@ const Sider = () => {
     };
 
     return (
-        <Space className="flex flex-col justify-center bg-slate-400 py-6" size={20}>
+        <Space className="bg-slate-400 flex justify-center py-5" size={20}>
             <div>
                 <Select
                     showSearch
