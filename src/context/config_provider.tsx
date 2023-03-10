@@ -1,7 +1,10 @@
 import { createContext, useState, useContext } from "react";
+import { getYearAndMon } from "@/utils/switchTime";
 
 export type Config = {
     category: string[];
+    dates: string[];
+    nowDate: string;
 };
 export type ConfigContextType = {
     config: Config;
@@ -11,7 +14,11 @@ export type ConfigContextType = {
 export const ConfigContext = createContext<ConfigContextType | null>(null);
 
 export default function ConfigProvider({ children }: { children: React.ReactNode }) {
-    const [config, setConfig] = useState<Config>({ category: [] });
+    const [config, setConfig] = useState<Config>({
+        category: [],
+        nowDate: getYearAndMon(new Date().getTime()),
+        dates: ["2023-01", "2023-03"],
+    });
 
     return (
         <ConfigContext.Provider value={{ config, changeConfig: setConfig }}>

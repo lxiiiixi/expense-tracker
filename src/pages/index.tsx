@@ -6,29 +6,59 @@ import AccountTable from "@/components/AccountTable";
 import { Item } from "@/components/AccountTable/interface";
 import FullPie from "@/components/Echarts/PieChart";
 import { getPieChart } from "@/utils/getCardFunc";
-import Sider from "@/components/Sider";
+import { useConfigContext } from "@/context/config_provider";
+import getDateFromData from "@/utils/getDateFromData";
+// import Sider from "@/components/Sider";
 
-import demoData from "../../demoData.js";
-const originAllData: Item[] = demoData;
+// import demoData from "../../demoData.js";
+// const originAllData: Item[] = demoData;
+
+const filterData = (originData: Item[], nowDisplay: string) => {
+    return originData.filter((item) => {
+        const [y, m, d] = item.time.split("-");
+        return `${y}-${m}` === nowDisplay;
+    });
+};
 
 const Index = () => {
-    const [nowDisplay, setNowDisplay] = useState("2023-02");
-    const [tableData, setTableData] = useState<Item[]>(originAllData);
-    const filterData = (originData: Item[], nowDisplay: string) => {
-        return originData.filter((item) => {
-            const [y, m, d] = item.time.split("-");
-            return `${y}-${m}` === nowDisplay;
-        });
-    };
-    const displayData = filterData(tableData, nowDisplay);
+    // const [nowDisplay, setNowDisplay] = useState(getYearAndMon(new Date().getTime()));
+    // const [tableData, setTableData] = useState<Item[]>(originAllData);
+    const { config, changeConfig } = useConfigContext();
+    const { nowDate } = config;
+    const [tableData, setTableData] = useState<Item[]>([]);
+    const displayData = filterData(tableData, nowDate);
+    const [firstEnter, setFirstEnter] = useState(false);
 
     const chanegeData = (newData: Item[]) => {
+        console.log(newData);
+
         setTableData(newData);
     };
 
     useEffect(() => {
-        console.log(tableData);
-    }, [tableData]);
+        const ExpenseTrackerData =
+            JSON.parse(localStorage.getItem("ExpenseTrackerData") as string) || [];
+        const { savedTableData, savedConfig } = ExpenseTrackerData;
+        setTableData(savedTableData);
+        changeConfig(savedConfig);
+        setFirstEnter(true);
+        console.log("Get saved data", ExpenseTrackerData);
+    }, [changeConfig]);
+
+    useEffect(() => {
+        if (firstEnter) {
+            // 每次tableData改变时检测一下有没有新的年月增加
+            // const newConfig = { ...config, dates: getDateFromData(tableData) };
+            // const saveData = { savedTableData: tableData, savedConfig: newConfig };
+            // console.log("Update saved data", saveData);
+            // localStorage.setItem("ExpenseTrackerData", JSON.stringify(saveData));
+        }
+    }, [tableData, firstEnter, config]);
+
+    useEffect(() => {
+        console.log(tableData, getDateFromData(tableData));
+        changeConfig({ ...config, dates: getDateFromData(tableData) });
+    }, [changeConfig, tableData]);
 
     return (
         <>
@@ -43,7 +73,7 @@ const Index = () => {
                     <Col xs={24} sm={24} md={24} lg={16}>
                         <div className="mx-5 lg:mx-0 lg:ml-10">
                             <AccountTable
-                                title="Feb."
+                                title="Mar."
                                 tableData={displayData}
                                 chanegeData={chanegeData}
                             />

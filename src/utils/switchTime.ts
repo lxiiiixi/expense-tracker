@@ -9,6 +9,16 @@ export function switchDate(timstamp: number) {
     return Y + M + D;
 }
 
+export function getYearAndMon(timstamp: number) {
+    if (!timstamp || timstamp <= 0) {
+        return "";
+    }
+    const date = new Date(timstamp);
+    const Y = `${date.getFullYear()}-`;
+    const M = `${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}`;
+    return Y + M;
+}
+
 export function switchTime(timstamp: number) {
     if (!timstamp) {
         return "";

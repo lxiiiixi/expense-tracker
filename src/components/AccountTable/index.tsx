@@ -9,7 +9,6 @@ import TableFooter from "./TableFooter";
 import getColumns from "./columns";
 import { useConfigContext } from "@/context/config_provider";
 
-// 还有一个bug：可能是输入框里有记录 每次Add之后会记录的时候默认输入框里会显示上一次的数据 而不是空的表单框
 const defaultDate = dayjs(dayjs(new Date()).format("YYYY-MM-DD")); // dayjs([]) returns the current time.
 
 export default function AccountTable({ tableData, title, chanegeData }: AccountTableProps) {
@@ -68,6 +67,7 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
         const obj = {
             key: newKey,
             cost: 0,
+            usage: "",
             description: "",
             time: addDate,
             category: categoryList[0],
@@ -75,7 +75,7 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
         chanegeData([...tableData, obj]);
         // 这里由于异步的原因 即使chanegeData更新了 但setEditingKey之后输入框不会默认值
         // 但是正常的用户体验是应该如此
-        form.setFieldsValue({ category: "", description: "", cost: "" });
+        form.setFieldsValue({ category: "", usage: "", description: "", cost: "" });
         setEditingKey(newKey);
     };
 

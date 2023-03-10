@@ -3,6 +3,7 @@ export interface Item {
     time: string;
     category: string;
     cost: number;
+    usage: string;
     description: string;
 }
 // 时间 项目(选择) 说明

@@ -27,6 +27,7 @@ export default function getColumns(
         newCategory = value;
     };
 
+    // 有个小bug：第一次进来编辑之后没反应 只有选了 defaultOptions 中的这里的newCategory才会有值
     const handleCategory = () => {
         changeConfig({ ...config, category: newCategory });
     };
@@ -90,6 +91,13 @@ export default function getColumns(
             // title: "Category",
             dataIndex: "category",
             width: "20%",
+            align: "center" as "center",
+            editable: true,
+        },
+        {
+            title: "Usage",
+            dataIndex: "usage",
+            width: "30%",
             align: "center" as "center",
             editable: true,
         },
