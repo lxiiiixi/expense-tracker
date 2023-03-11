@@ -34,5 +34,6 @@ export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 export interface AccountTableProps {
     title: React.ReactNode;
     tableData: Item[];
+    displayData: Item[];
     chanegeData: (newData: Item[]) => void;
 }

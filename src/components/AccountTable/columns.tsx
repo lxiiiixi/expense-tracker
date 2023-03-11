@@ -21,6 +21,7 @@ export default function getColumns(
     changeConfig: (config: Config) => void
 ) {
     const categoryList = config.category;
+
     const isEditing = (record: Item) => record.key === editingKey;
     let newCategory: string[] = [];
     const handleEditCategory = (value: string[]) => {
@@ -65,7 +66,7 @@ export default function getColumns(
         {
             title: "Time",
             dataIndex: "time",
-            width: "20%",
+            width: "15%",
             editable: false,
             align: "center" as "center",
             onCell: (record: object) => {
@@ -90,21 +91,21 @@ export default function getColumns(
             ),
             // title: "Category",
             dataIndex: "category",
-            width: "20%",
+            width: "15%",
             align: "center" as "center",
             editable: true,
         },
         {
             title: "Usage",
             dataIndex: "usage",
-            width: "30%",
+            width: "15%",
             align: "center" as "center",
             editable: true,
         },
         {
             title: "Description",
             dataIndex: "description",
-            width: "30%",
+            width: "25%",
             align: "center" as "center",
             editable: true,
         },
@@ -119,6 +120,7 @@ export default function getColumns(
             title: "Operation",
             dataIndex: "operation",
             align: "center" as "center",
+            width: "15%",
             render: (_: any, record: object) => {
                 const recordItem = record as Item;
                 const editable = isEditing(recordItem);

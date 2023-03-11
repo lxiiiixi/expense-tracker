@@ -17,7 +17,7 @@ export default function ConfigProvider({ children }: { children: React.ReactNode
     const [config, setConfig] = useState<Config>({
         category: [],
         nowDate: getYearAndMon(new Date().getTime()),
-        dates: ["2023-01", "2023-03"],
+        dates: [],
     });
 
     return (

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Form, Input, Popconfirm, Table, Typography, Select, Card, Space } from "antd";
+import { Button, Form, Input, Popconfirm, Table, message, Select, Card, Space } from "antd";
 import type { DatePickerProps } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -11,14 +11,20 @@ import { useConfigContext } from "@/context/config_provider";
 
 const defaultDate = dayjs(dayjs(new Date()).format("YYYY-MM-DD")); // dayjs([]) returns the current time.
 
-export default function AccountTable({ tableData, title, chanegeData }: AccountTableProps) {
+export default function AccountTable({
+    tableData,
+    displayData,
+    title,
+    chanegeData,
+}: AccountTableProps) {
     const [form] = Form.useForm();
     const { config, changeConfig } = useConfigContext();
+    const { category: categoryList, nowDate } = config;
     const [editingKey, setEditingKey] = useState("");
     const [addDate, setAddDate] = useState(defaultDate.format("YYYY-MM-DD")); // DataPicker的时间值
     const [searchValue, setSearchValue] = useState("");
     const [selectCategory, setSelectCategory] = useState("All");
-    const categoryList = config.category; // 直接使用会被使用useState定义少一次render
+    const [messageApi, contextHolder] = message.useMessage();
 
     dayjs.extend(customParseFormat);
 
@@ -63,6 +69,16 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
     };
 
     const addRow = () => {
+        const changedDate = addDate.split("-")[0] + "-" + addDate.split("-")[1];
+        if (!(changedDate === nowDate)) {
+            changeConfig({
+                ...config,
+                nowDate: changedDate,
+                dates: config.dates.includes(changedDate)
+                    ? [...config.dates]
+                    : [...config.dates, changedDate],
+            });
+        }
         const newKey = new Date().getTime().toString();
         const obj = {
             key: newKey,
@@ -80,6 +96,13 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
     };
 
     const onChange: DatePickerProps["onChange"] = (date, dateString) => {
+        const changedDate = dateString.split("-")[0] + "-" + dateString.split("-")[1];
+        if (!(changedDate === nowDate)) {
+            messageApi.open({
+                type: "warning",
+                content: `If you want to add【${changedDate}】data, please switch to that month first`,
+            });
+        }
         setAddDate(dateString);
     };
 
@@ -127,7 +150,7 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
         config,
         changeConfig
     );
-    const dataSource = handleSearch(searchValue, selectCategory, tableData);
+    const dataSource = handleSearch(searchValue, selectCategory, displayData);
     const totalData = dataSource.length
         ? dataSource.map((item) => item.cost).reduce((cost1, cost2) => cost1 + cost2)
         : 0; // 如果筛选后是空数组就直接为0了 Reduce of empty array with no initial value
@@ -165,6 +188,7 @@ export default function AccountTable({ tableData, title, chanegeData }: AccountT
                 </Space>
             }
         >
+            {contextHolder}
             <Form form={form} component={false}>
                 <Table
                     components={{
