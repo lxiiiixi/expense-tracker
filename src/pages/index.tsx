@@ -5,6 +5,7 @@ import { Row, Col, Card, Space, Input } from "antd";
 import AccountTable from "@/components/AccountTable";
 import { Item } from "@/components/AccountTable/interface";
 import FullPie from "@/components/Echarts/PieChart";
+import CalendarChart from "@/components/Calendar";
 import { getPieChart } from "@/utils/getCardFunc";
 import { useConfigContext } from "@/context/config_provider";
 import { useDataContext } from "@/context/data_provider";
@@ -77,16 +78,6 @@ const Index = () => {
                         </div>
                     </Col>
                     <Col xs={24} sm={24} md={24} lg={8} className="p-5 lg:p-0 lg:pl-10">
-                        {/* <div className="h-auto w-full rounded-l-xl bg-white py-4 px-6 shadow-xl">
-                            <h2 className="text-left">Cards</h2>
-                            <div className="flex flex-col">
-                                <Card className="my-2 shadow-sm hover:shadow-lg">
-                                    <FullPie data={getPieChart(displayData)} />
-                                </Card>
-                                <Card className="my-2 shadow-sm hover:shadow-lg">
-                                </Card>
-                            </div>
-                        </div> */}
                         <Card
                             title={<div className="text-left">Card</div>}
                             className="rounded-3xl lg:rounded-none lg:rounded-l-3xl"
@@ -103,7 +94,9 @@ const Index = () => {
                             <Card className="my-2 shadow-sm hover:shadow-lg">
                                 <FullPie data={getPieChart(displayData)} />
                             </Card>
-                            <Card className="my-2 shadow-sm hover:shadow-lg"></Card>
+                            <Card className="my-2 shadow-sm hover:shadow-lg">
+                                <CalendarChart />
+                            </Card>
                         </Card>
                     </Col>
                 </Row>
