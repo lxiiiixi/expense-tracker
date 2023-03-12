@@ -16,7 +16,8 @@ export const ConfigContext = createContext<ConfigContextType | null>(null);
 export default function ConfigProvider({ children }: { children: React.ReactNode }) {
     const [config, setConfig] = useState<Config>({
         category: [],
-        nowDate: getYearAndMon(new Date().getTime()),
+        nowDate: "",
+        // nowDate: getYearAndMon(new Date().getTime()),
         dates: [],
     });
 
