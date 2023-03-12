@@ -39,11 +39,14 @@ const Index = () => {
     useEffect(() => {
         const ExpenseTrackerData =
             JSON.parse(localStorage.getItem("ExpenseTrackerData") as string) || [];
-        const { savedTableData, savedConfig } = ExpenseTrackerData;
-        changeWholeData(savedTableData);
-        changeConfig(savedConfig);
-        setFirstEnter(true);
-        console.log("Get saved data", ExpenseTrackerData);
+        // 如果不做判断的话获取不到数据 后续会报错
+        if (ExpenseTrackerData.length) {
+            const { savedTableData, savedConfig } = ExpenseTrackerData;
+            changeWholeData(savedTableData);
+            changeConfig(savedConfig);
+            setFirstEnter(true);
+            console.log("Get saved data", ExpenseTrackerData);
+        }
     }, [changeConfig, changeWholeData]);
 
     useEffect(() => {
