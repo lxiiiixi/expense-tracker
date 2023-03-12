@@ -37,10 +37,9 @@ const Index = () => {
     };
 
     useEffect(() => {
-        const ExpenseTrackerData =
-            JSON.parse(localStorage.getItem("ExpenseTrackerData") as string) || [];
+        const ExpenseTrackerData = JSON.parse(localStorage.getItem("ExpenseTrackerData") as string);
         // 如果不做判断的话获取不到数据 后续会报错
-        if (ExpenseTrackerData.length) {
+        if (ExpenseTrackerData) {
             const { savedTableData, savedConfig } = ExpenseTrackerData;
             changeWholeData(savedTableData);
             changeConfig(savedConfig);
