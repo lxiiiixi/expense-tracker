@@ -3,6 +3,7 @@ interface PieChartData {
     name: string;
     value: number;
 }
+// 根据不同分类得到所有数据
 export const getPieChart = (itemArr: Item[]) => {
     let obj: { [key: string]: number } = {};
     itemArr.forEach((item) => {

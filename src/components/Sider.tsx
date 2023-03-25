@@ -1,5 +1,5 @@
 import { Button, Space, Tooltip, Select, Dropdown } from "antd";
-import { ArrowDownOutlined, PlusOutlined, DownOutlined } from "@ant-design/icons";
+import { ArrowDownOutlined, PlusOutlined, DownOutlined ,SaveOutlined} from "@ant-design/icons";
 import { useThemeContext, Theme } from "@/context/theme_provider";
 import { useConfigContext } from "@/context/config_provider";
 import { useDataContext } from "@/context/data_provider";
@@ -28,16 +28,7 @@ const Sider = () => {
         label: item,
     }));
 
-    // function downloadFile(content, filename = "labelsCloud.json") {
-    //     var blob = new Blob([content], { type: "text/json;charset=UTF-8" });
-    //     var url = window.URL.createObjectURL(blob);
-    //     chrome.downloads.download({
-    //        url: url,
-    //        filename: filename
-    //     })
-    //  }
     const handleDownload = () => {
-        console.log(wholeData);
         const blob = new Blob([JSON.stringify(wholeData)], { type: "text/json;charset=UTF-8" }); // 创建新的 Blob 对象
         const url = URL.createObjectURL(blob); // 创建 URL 对象
         const link = document.createElement("a"); // 创建隐藏的下载链接并点击
@@ -46,6 +37,12 @@ const Sider = () => {
         link.click();
         URL.revokeObjectURL(url);
     };
+
+    const handleSaveAsImage = () =>{
+        console.log(wholeData);
+        
+
+    }
 
     return (
         <Space className="bg-slate-400 flex justify-center py-5" size={20}>
@@ -78,6 +75,9 @@ const Sider = () => {
             </Dropdown>
             <Tooltip title="Download All Data" placement="bottom">
                 <Button onClick={handleDownload} shape="circle" icon={<ArrowDownOutlined />} />
+            </Tooltip>
+            <Tooltip title="Download As Image" placement="bottom">
+                <Button onClick={handleSaveAsImage} shape="circle" icon={<SaveOutlined />} />
             </Tooltip>
             <Tooltip title="Add" placement="rightTop">
                 <Button shape="circle" icon={<PlusOutlined />} />

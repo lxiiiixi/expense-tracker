@@ -11,6 +11,7 @@ import { useConfigContext } from "@/context/config_provider";
 import { useDataContext } from "@/context/data_provider";
 import transTime from "@/utils/transTime";
 import getDateFromData from "@/utils/getDateFromData";
+import { getCalendarFunc } from "@/utils/getCalendarFunc";
 
 // import Sider from "@/components/Sider";
 // import demoData from "../../demoData.js";
@@ -93,12 +94,17 @@ const Index = () => {
                                 />
                             }
                         >
-                            <Card className="my-2 shadow-sm hover:shadow-lg">
-                                <FullPie data={getPieChart(displayData)} />
-                            </Card>
-                            <Card className="my-2 shadow-sm hover:shadow-lg">
-                                <CalendarChart />
-                            </Card>
+                            <Space direction="vertical" size="large">
+                                <Card className="shadow-sm hover:shadow-lg">
+                                    <FullPie data={getPieChart(displayData)} />
+                                </Card>
+                                <Card className="p-0 shadow-sm hover:shadow-lg">
+                                    <CalendarChart
+                                        data={getCalendarFunc(displayData)}
+                                        date={nowDate}
+                                    />
+                                </Card>
+                            </Space>
                         </Card>
                     </Col>
                 </Row>

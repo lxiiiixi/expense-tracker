@@ -128,6 +128,7 @@ export default function AccountTable({
             return (
                 value.time.toLowerCase().includes(seachValue.toLowerCase()) ||
                 value.category.toLowerCase().includes(seachValue.toLowerCase()) ||
+                value.usage.toLowerCase().includes(seachValue.toLowerCase()) ||
                 value.cost.toString().toLowerCase().includes(seachValue.toLowerCase()) ||
                 value.description.toString().toLowerCase().includes(seachValue.toLowerCase())
             );

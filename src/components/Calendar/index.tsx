@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
 import type { Dayjs } from "dayjs";
@@ -7,38 +7,16 @@ import { Calendar, Col, Radio, Row, Select, Typography, theme, Tag } from "antd"
 import type { CalendarMode } from "antd/es/calendar/generateCalendar";
 dayjs.extend(dayLocaleData);
 
-const CalendarChart = () => {
-    const { token } = theme.useToken();
-
+const CalendarChart = ({
+    data,
+    date,
+}: {
+    data: { cost: number; time: string }[];
+    date: string;
+}) => {
+    const [levelNum, setLevelNum] = useState(200);
     const onPanelChange = (value: Dayjs, mode: CalendarMode) => {
         console.log(value.format("YYYY-MM-DD"), mode);
-    };
-
-    const wrapperStyle = {
-        width: 300,
-        border: `1px solid ${token.colorBorderSecondary}`,
-        borderRadius: token.borderRadiusLG,
-    };
-
-    const getListData = (value: Dayjs) => {
-        let listData;
-        switch (value.date()) {
-            case 9:
-                listData = [{ type: "warning", content: "" }];
-                break;
-            case 8:
-                listData = [{ type: "warning", content: "12" }];
-                break;
-            case 10:
-                listData = [{ type: "success", content: "100" }];
-                break;
-            case 15:
-                listData = [{ type: "error", content: "1289" }];
-                break;
-            default:
-                listData = [{ type: "warning", content: "" }];
-        }
-        return listData || [];
     };
 
     const getMonthData = (value: Dayjs) => {
@@ -46,38 +24,47 @@ const CalendarChart = () => {
             return 1394;
         }
     };
+
     const monthCellRender = (value: Dayjs) => {
         const num = getMonthData(value);
         return num ? (
             <div className="notes-month">
                 <section>{num}</section>
-                <span>Backlog number</span>
             </div>
         ) : null;
     };
 
     const dateCellRender = (value: Dayjs) => {
-        const listData = getListData(value);
+        const ifNowMonth = value.get("month") - 1 === Number(date.split("-")[1]);
+        let itemData = data.filter(
+            (element) => Number(element.time.split("-")[2]) === value.date()
+        )[0];
+        let tagColor = "gold";
+        console.log(value.get("month"), Number(date.split("-")[1]));
+
+        if (itemData?.cost >= levelNum) {
+            tagColor = "red";
+        }
+
         return (
-            // <ul className="events">
-            //     {listData.map((item) => (
-            //         <li key={item.content}>{item.content}</li>
-            //     ))}
-            // </ul>
             <>
-                {listData.map((item) => (
-                    <Tag color="gold" key={item.content}>
-                        {item.content}
+                {itemData && ifNowMonth && (
+                    <Tag className="mt-1 w-full text-center" color={tagColor}>
+                        {itemData.cost}
                     </Tag>
-                ))}
+                )}
+                {!itemData && ifNowMonth && (
+                    <Tag className="mt-1 w-full text-center" color="green">
+                        0
+                    </Tag>
+                )}
             </>
         );
     };
 
     return (
-        <div style={wrapperStyle}>
+        <div style={{ width: "100%", borderRadius: "8px" }}>
             <Calendar
-                style={{ width: "100%" }}
                 fullscreen={false}
                 dateCellRender={dateCellRender}
                 monthCellRender={monthCellRender}
@@ -114,7 +101,6 @@ const CalendarChart = () => {
                     }
                     return (
                         <div style={{ padding: 8 }}>
-                            <Typography.Title level={4}>Custom header</Typography.Title>
                             <Row gutter={8}>
                                 <Col>
                                     <Radio.Group
@@ -152,6 +138,9 @@ const CalendarChart = () => {
                                     >
                                         {monthOptions}
                                     </Select>
+                                </Col>
+                                <Col>
+                                    <Tag color="red">{levelNum}</Tag>
                                 </Col>
                             </Row>
                         </div>
