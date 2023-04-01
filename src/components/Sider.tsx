@@ -1,12 +1,14 @@
 import { Button, Space, Tooltip, Select, Dropdown } from "antd";
-import { ArrowDownOutlined, PlusOutlined, DownOutlined ,SaveOutlined} from "@ant-design/icons";
+import { ArrowDownOutlined, PlusOutlined, DownOutlined, SaveOutlined } from "@ant-design/icons";
 import { useThemeContext, Theme } from "@/context/theme_provider";
 import { useConfigContext } from "@/context/config_provider";
 import { useDataContext } from "@/context/data_provider";
 import { switchDate } from "@/utils/switchTime";
+import { useRouter } from "next/router";
 import type { MenuProps } from "antd";
 
 const Sider = () => {
+    const router = useRouter();
     const { changeTheme } = useThemeContext();
     const { config, changeConfig } = useConfigContext();
     const { wholeData } = useDataContext();
@@ -38,11 +40,13 @@ const Sider = () => {
         URL.revokeObjectURL(url);
     };
 
-    const handleSaveAsImage = () =>{
-        console.log(wholeData);
-        
-
-    }
+    const handleSaveAsImage = () => {
+        // 1. 从这里跳转页面 到预览页面
+        // 2. 预览页面直接拿到全局的数据和当前显示的月份 根据月份做筛选 得到当前页的所有数据
+        // 3. 把数据填进去展示出来
+        // 4. 图片下载
+        router.push("/download/" + nowDate);
+    };
 
     return (
         <Space className="bg-slate-400 flex justify-center py-5" size={20}>
@@ -73,10 +77,10 @@ const Sider = () => {
                     </Space>
                 </Button>
             </Dropdown>
-            <Tooltip title="Download All Data" placement="bottom">
+            <Tooltip title="Export All Data Source" placement="bottom">
                 <Button onClick={handleDownload} shape="circle" icon={<ArrowDownOutlined />} />
             </Tooltip>
-            <Tooltip title="Download As Image" placement="bottom">
+            <Tooltip title="Data Preview And Download" placement="bottom">
                 <Button onClick={handleSaveAsImage} shape="circle" icon={<SaveOutlined />} />
             </Tooltip>
             <Tooltip title="Add" placement="rightTop">

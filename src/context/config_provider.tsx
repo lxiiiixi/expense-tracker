@@ -30,3 +30,7 @@ export default function ConfigProvider({ children }: { children: React.ReactNode
 export function useConfigContext() {
     return useContext(ConfigContext) as ConfigContextType;
 }
+
+/**
+ *
+ */

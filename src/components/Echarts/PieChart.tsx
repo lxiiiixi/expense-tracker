@@ -6,9 +6,15 @@ interface FullPieConfigProps {
     title?: string;
     subtitle?: string;
     data: { value: number; name: string }[];
+    lableIncludeNum?: boolean;
 }
 
-const FullPieConfig = ({ title = "", subtitle = "", data }: FullPieConfigProps) =>
+const FullPieConfig = ({
+    title = "",
+    subtitle = "",
+    data,
+    lableIncludeNum = false,
+}: FullPieConfigProps) =>
     extend(
         commonConfig({
             title,
@@ -41,7 +47,8 @@ const FullPieConfig = ({ title = "", subtitle = "", data }: FullPieConfigProps) 
                     label: {
                         show: true,
                         position: "inside",
-                        formatter: "{d}%", // {a}、{b}、{c}、{d}，分别表示系列名、数据名、数据值、百分比
+                        formatter: lableIncludeNum ? "¥{c}\n{d}%" : "{d}%",
+                        // {a}、{b}、{c}、{d}，分别表示系列名、数据名、数据值、百分比
                         align: "center",
                         baseline: "middle",
                         fontFamily: "微软雅黑",

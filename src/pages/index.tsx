@@ -32,6 +32,7 @@ const Index = () => {
     const { nowDate } = config;
     const displayData = filterData(wholeData, nowDate); // display data
     const [firstEnter, setFirstEnter] = useState(false);
+    // 用这个记录是因为一个bug 但是又引发出来一个新的bug 就是第一次进入的页面永远也不会存数据
 
     const chanegeData = (newData: Item[]) => {
         changeWholeData(newData);
@@ -39,6 +40,7 @@ const Index = () => {
 
     useEffect(() => {
         const ExpenseTrackerData = JSON.parse(localStorage.getItem("ExpenseTrackerData") as string);
+
         // 如果不做判断的话获取不到数据 后续会报错
         if (ExpenseTrackerData) {
             const { savedTableData, savedConfig } = ExpenseTrackerData;

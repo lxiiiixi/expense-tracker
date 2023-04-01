@@ -1,5 +1,4 @@
 import type { AppProps } from "next/app";
-import React from "react";
 import ThemeProvider from "@/context/theme_provider";
 import ConfigProvider from "@/context/config_provider";
 import DataProvider from "@/context/data_provider";

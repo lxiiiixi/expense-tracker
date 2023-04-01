@@ -35,12 +35,12 @@ const CalendarChart = ({
     };
 
     const dateCellRender = (value: Dayjs) => {
-        const ifNowMonth = value.get("month") - 1 === Number(date.split("-")[1]);
+        const ifNowMonth = value.get("month") + 1 === Number(date?.split("-")[1]);
         let itemData = data.filter(
             (element) => Number(element.time.split("-")[2]) === value.date()
         )[0];
         let tagColor = "gold";
-        console.log(value.get("month"), Number(date.split("-")[1]));
+        // console.log(value.get("month"), Number(date.split("-")[1]));
 
         if (itemData?.cost >= levelNum) {
             tagColor = "red";
