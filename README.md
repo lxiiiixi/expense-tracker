@@ -1,38 +1,16 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Bugs
 
-## Getting Started
+- [ ] 如果不是从首页进入的download页面而是直接加载这个页面，此时还没有全局数据，应该对这种情况做额外的处理
+- [ ] 下载为 pdf 这里格式还需要调整
+- [ ] 首次进入到页面时数据无法保存到 localstorage（有一个变量的原因）
+- [ ] Download 页面是默认主题，而没有自定义的主题，因为主题的 configProvider 在 PageLayout 组件上，但是这个页面没有用这个组件
+- [ ] 考虑在 PageLayout 还是增加一个导航条，两个页面分为公共配置（主题切换）和独立配置（下载跳转这些）
 
-First, run the development server:
+## Todo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+-   [ ] Download 页面把 download card 设置为可调节大小的元素
+-   [ ] 目前主题切换只有 Antd 的配置切换，背景色这些还没有做切换
+-   [ ] 目前页面排版比较难看，还没想好布局
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
